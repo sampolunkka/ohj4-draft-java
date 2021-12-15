@@ -14,6 +14,8 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.*;
+
 import com.diogonunes.jcolor.Ansi;
 import com.diogonunes.jcolor.Attribute;
 
@@ -67,7 +69,16 @@ public class ChatClient implements ChatClientDataProvider {
 	public static int serverVersion = 3;
 
 	public static void main(String[] args) {
-		if (args.length == 1) {								
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new GUI();
+			}
+
+		});
+
+		if (args.length == 1) {
 			try {
 				System.out.println("Launching ChatClient with config file " + args[0]);
 				ChatClient client = new ChatClient();
@@ -152,7 +163,7 @@ public class ChatClient implements ChatClientDataProvider {
 						break;
 				}
 			} catch (Exception e) {
-				println(" *** ERROR : " + e.getMessage(),colorError);
+				println(" *** ERROR : " + e.getMessage(), colorError);
 				e.printStackTrace();
 			}
 		}
@@ -337,10 +348,10 @@ public class ChatClient implements ChatClientDataProvider {
 		} catch (KeyManagementException | KeyStoreException | CertificateException | NoSuchAlgorithmException
 				| FileNotFoundException e) {
 			println(" **** ERROR in server certificate", colorError);
-			println(e.getLocalizedMessage(),colorError);
+			println(e.getLocalizedMessage(), colorError);
 		} catch (Exception e) {
 			println(" **** ERROR in user registration with server " + currentServer, colorError);
-			println(e.getLocalizedMessage(),colorError);
+			println(e.getLocalizedMessage(), colorError);
 		}
 	}
 
@@ -377,17 +388,18 @@ public class ChatClient implements ChatClientDataProvider {
 						}
 					}
 				} else {
-					println(" **** Error from server: " + response + " " + httpClient.getServerNotification(), colorError);
+					println(" **** Error from server: " + response + " " + httpClient.getServerNotification(),
+							colorError);
 				}
 			} else {
 				println("Not yet registered or logged in!", colorError);
 			}
 		} catch (KeyManagementException | KeyStoreException | CertificateException | NoSuchAlgorithmException
 				| FileNotFoundException e) {
-			println(" **** ERROR in server certificate",colorError);
+			println(" **** ERROR in server certificate", colorError);
 			println(e.getLocalizedMessage(), colorError);
 		} catch (IOException e) {
-			println(" **** ERROR in getting messages from server " + currentServer,colorError);
+			println(" **** ERROR in getting messages from server " + currentServer, colorError);
 			println(e.getLocalizedMessage(), colorError);
 		}
 		return count;
@@ -407,7 +419,7 @@ public class ChatClient implements ChatClientDataProvider {
 				}
 			} catch (KeyManagementException | KeyStoreException | CertificateException | NoSuchAlgorithmException
 					| FileNotFoundException e) {
-				println(" **** ERROR in server certificate",colorError);
+				println(" **** ERROR in server certificate", colorError);
 				println(e.getLocalizedMessage(), colorError);
 			} catch (IOException e) {
 				println(" **** ERROR in posting message to server " + currentServer, colorError);
@@ -428,7 +440,8 @@ public class ChatClient implements ChatClientDataProvider {
 		println("/login     -- Login using already registered credentials", colorInfo);
 		println("/nick      -- Specify a nickname to use in chat server", colorInfo);
 		println("/get       -- Get new messages from server", colorInfo);
-		println("/auto      -- Toggles automatic /get in " + AUTO_FETCH_INTERVAL / 1000.0 + " sec intervals", colorInfo);
+		println("/auto      -- Toggles automatic /get in " + AUTO_FETCH_INTERVAL / 1000.0 + " sec intervals",
+				colorInfo);
 		println("/color     -- Toggles color output on/off", colorInfo);
 		println("/help      -- Prints out this information", colorInfo);
 		println("/info      -- Prints out settings and user information", colorInfo);
@@ -484,7 +497,7 @@ public class ChatClient implements ChatClientDataProvider {
 		}
 		istream.close();
 	}
-	
+
 	/*
 	 * Implementation of the ChatClientDataProvider interface. The ChatHttpClient
 	 * calls these methods to get configuration info needed in communication with
@@ -525,6 +538,5 @@ public class ChatClient implements ChatClientDataProvider {
 	public boolean useModifiedSinceHeaders() {
 		return useModifiedHeaders;
 	}
-
 
 }
