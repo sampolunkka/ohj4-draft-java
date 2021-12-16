@@ -2,6 +2,7 @@ package oy.tol.chatclient;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GUI {
 
@@ -10,8 +11,14 @@ public class GUI {
     // Päänäkymä
     JFrame frame = new JFrame();
 
+    // SUB-Näkymä
+    JPanel content = new JPanel();
+
     // NORTH
-    JMenu topMenu = new JMenu();
+    JMenuBar menuBar = new JMenuBar();
+
+    JMenu userMenu = new JMenu("User");
+    JMenuItem userMenuLogout = new JMenuItem("Log out");
     JPanel topPanel = new JPanel();
 
     // EAST
@@ -25,6 +32,7 @@ public class GUI {
     JPanel bottomPanel = new JPanel();
     JTextField messageField = new JTextField();
     JButton messageSendButton = new JButton("Send");
+    JLabel channelLabel = new JLabel("/channel");
 
     // CENTER
     JPanel mainPanel = new JPanel();
@@ -33,18 +41,21 @@ public class GUI {
     JTextArea messagesTextArea = new JTextArea(lipsum);
 
     public GUI() {
-        topPanel.add(topMenu);
+        userMenu.add(userMenuLogout);
+        menuBar.add(userMenu);
 
         bottomPanel.setLayout(new BorderLayout());
+        channelLabel.setMinimumSize(new Dimension(200, 50));
         bottomPanel.add(messageField, BorderLayout.CENTER);
         bottomPanel.add(messageSendButton, BorderLayout.EAST);
 
         frame.setLayout(new BorderLayout());
-        frame.add(topPanel, BorderLayout.NORTH);
-        frame.add(usersFrame, BorderLayout.EAST);
-        frame.add(bottomPanel, BorderLayout.SOUTH);
-
         frame.add(navigationFrame, BorderLayout.WEST);
+        frame.add(menuBar, BorderLayout.NORTH);
+
+        content.setLayout(new BorderLayout());
+        content.add(usersFrame, BorderLayout.EAST);
+        content.add(bottomPanel, BorderLayout.SOUTH);
 
         // mainPanel.add(chatPane);
         // mainPanel.setLayout(new BorderLayout());
@@ -52,8 +63,9 @@ public class GUI {
         messagesTextArea.setLineWrap(true);
         messagesTextArea.setWrapStyleWord(true);
         chatPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        frame.add(chatPane, BorderLayout.CENTER);
+        content.add(chatPane, BorderLayout.CENTER);
 
+        frame.add(content, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
