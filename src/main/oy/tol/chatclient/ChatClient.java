@@ -69,32 +69,37 @@ public class ChatClient implements ChatClientDataProvider {
 	 */
 	public static int serverVersion = 3;
 
-	public static void main(String[] args) {
-
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-
-				new GUI();
-			}
-
-		});
-		if (args.length == 1) {
-			try {
-				System.out.println("Launching ChatClient with config file " + args[0]);
-				ChatClient client = new ChatClient();
-				client.run(args[0]);
-			} catch (Exception e) {
-				System.out.println("Failed to run the ChatClient");
-				System.out.println("Reason: " + e.getLocalizedMessage());
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("Usage: java -jar chat-client-jar-file chatclient.properties");
-			System.out.println("Where chatclient.properties is the client configuration file");
-			return;
-		}
-	}
+	/*
+	 * public static void main(String[] args) {
+	 * 
+	 * SwingUtilities.invokeLater(new Runnable() {
+	 * 
+	 * @Override
+	 * public void run() {
+	 * 
+	 * new LoginFrame(this);
+	 * }
+	 * 
+	 * });
+	 * if (args.length == 1) {
+	 * try {
+	 * System.out.println("Launching ChatClient with config file " + args[0]);
+	 * ChatClient client = new ChatClient();
+	 * client.run(args[0]);
+	 * } catch (Exception e) {
+	 * System.out.println("Failed to run the ChatClient");
+	 * System.out.println("Reason: " + e.getLocalizedMessage());
+	 * e.printStackTrace();
+	 * }
+	 * } else {
+	 * System.out.
+	 * println("Usage: java -jar chat-client-jar-file chatclient.properties");
+	 * System.out.
+	 * println("Where chatclient.properties is the client configuration file");
+	 * return;
+	 * }
+	 * }
+	 */
 
 	/**
 	 * Runs the show: - Creates the http client - displays the menu - handles
@@ -362,7 +367,8 @@ public class ChatClient implements ChatClientDataProvider {
 	 * 
 	 * @return The count of new messages from server.
 	 */
-	private int getNewMessages() {
+	public int getNewMessages() {
+		System.out.println("lol");
 		int count = 0;
 		try {
 			if (null != username && null != password) {
@@ -395,6 +401,7 @@ public class ChatClient implements ChatClientDataProvider {
 				}
 			} else {
 				println("Not yet registered or logged in!", colorError);
+				return -1;
 			}
 		} catch (KeyManagementException | KeyStoreException | CertificateException | NoSuchAlgorithmException
 				| FileNotFoundException e) {

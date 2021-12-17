@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 class MainFrame extends JFrame implements ActionListener {
 
-    private GUI gui;
+    private ChatClient client;
 
     String lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut tellus elementum sagittis vitae et leo duis ut diam. Viverra tellus in hac habitasse platea dictumst. Aliquet enim tortor at auctor urna. Tempor nec feugiat nisl pretium fusce id velit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse in. Turpis egestas integer eget aliquet nibh praesent tristique magna sit. Amet commodo nulla facilisi nullam vehicula ipsum a arcu. Faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis. Gravida neque convallis a cras semper auctor neque vitae tempus. Nec ullamcorper sit amet risus nullam eget felis eget. Ipsum suspendisse ultrices gravida dictum fusce. Eget est lorem ipsum dolor sit.";
 
@@ -49,9 +49,9 @@ class MainFrame extends JFrame implements ActionListener {
     String messages[] = { "message1", "MEssage 22222", "message 3" };
     JTextArea messagesTextArea = new JTextArea(lipsum);
 
-    public MainFrame(GUI gui) {
+    public MainFrame(ChatClient client) {
 
-        this.gui = gui;
+        this.client = client;
 
         userMenu.add(userMenuLogout);
         menuBar.add(userMenu);
@@ -88,7 +88,9 @@ class MainFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
+        if (e.getSource() == messageSendButton) {
+            client.getNewMessages();
+        }
 
     }
 }

@@ -18,9 +18,9 @@ public class GUI extends JFrame implements ChatClientDataProvider {
 
     public GUI() {
         if (!loggedIn) {
-            frame = new LoginFrame(this);
+            // frame = new LoginFrame(this);
         } else {
-            frame = new MainFrame(this);
+            // frame = new MainFrame(this);
         }
     }
 
@@ -32,7 +32,7 @@ public class GUI extends JFrame implements ChatClientDataProvider {
         System.out.println("lol");
         loggedIn = true;
         frame.dispose();
-        frame = new MainFrame(this);
+        // frame = new MainFrame(this);
     }
 
     @Override

@@ -15,7 +15,7 @@ import javax.swing.*;
 
 class LoginFrame extends JFrame implements ActionListener {
 
-    private GUI gui;
+    private ChatClient client;
 
     Color colContent = new Color(0x1D1F20);
     Color colHeader = new Color(0x393D3F);
@@ -44,9 +44,9 @@ class LoginFrame extends JFrame implements ActionListener {
     JButton loginButton = new JButton("login");
     JButton registerButton = new JButton("register");
 
-    public LoginFrame(GUI gui) {
+    public LoginFrame(ChatClient client) {
 
-        this.gui = gui;
+        this.client = client;
 
         // BEGIN HEADER
         titleLabel.setFont(titleLabel.getFont().deriveFont(64.0f));
@@ -112,7 +112,12 @@ class LoginFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginButton) {
-            gui.login();
+            if (client.getNewMessages() < 0) {
+                System.out.println("Invalid login info");
+            } else {
+                MainFrame frame = new MainFrame(client);
+                this.dispose();
+            }
         }
 
     }
