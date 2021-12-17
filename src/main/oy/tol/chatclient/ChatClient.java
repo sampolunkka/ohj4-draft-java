@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.http.HttpClient;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -73,11 +74,11 @@ public class ChatClient implements ChatClientDataProvider {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+
 				new GUI();
 			}
 
 		});
-
 		if (args.length == 1) {
 			try {
 				System.out.println("Launching ChatClient with config file " + args[0]);
@@ -108,6 +109,7 @@ public class ChatClient implements ChatClientDataProvider {
 			useHttps = true;
 		}
 		httpClient = new ChatHttpClient(this, clientCertificateFile, useHttps);
+
 		printCommands();
 		printInfo();
 		Console console = System.console();
@@ -497,7 +499,6 @@ public class ChatClient implements ChatClientDataProvider {
 		}
 		istream.close();
 	}
-
 	/*
 	 * Implementation of the ChatClientDataProvider interface. The ChatHttpClient
 	 * calls these methods to get configuration info needed in communication with
