@@ -72,7 +72,6 @@ class LoginFrame extends JFrame implements ActionListener {
         contentPanel.setOpaque(true);
         loginLabel.setFont(loginLabel.getFont().deriveFont(35.0f));
         loginButton.setBounds(100, 220, 200, 20);
-        loginButton.addActionListener(this);
 
         registerLabel.setBounds(100, 300, 400, 100);
         registerLabel.setFont(loginLabel.getFont().deriveFont(35.0f));
@@ -86,6 +85,9 @@ class LoginFrame extends JFrame implements ActionListener {
         // add a Text field -> takes default focus
         JTextField defaultFocus = new JTextField();
         defaultFocus.setEditable(false);
+
+        loginButton.addActionListener(this);
+        registerButton.addActionListener(this);
 
         contentPanel.add(defaultFocus);
         contentPanel.add(registerLabel);
@@ -111,12 +113,35 @@ class LoginFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // LOGIN
         if (e.getSource() == loginButton) {
+
+            client.setUsername(usernField.getText());
+            client.setPassword(passwField.getText());
+
             if (client.getNewMessages() < 0) {
+                client.resetCredentials();
                 System.out.println("Invalid login info");
             } else {
                 MainFrame frame = new MainFrame(client);
                 this.dispose();
+            }
+        }
+
+        // REGISTER
+        if (e.getSource() == registerButton) {
+
+            String a = regPasswField.getText();
+            String b = confField.getText();
+            System.out.println("register button pressed");
+
+            if (a.equals(b)) {
+                System.out.println("passwords match");
+                client.setUsername(regUsernField.getText());
+                client.setPassword(regPasswField.getText());
+                client.setEmail(emailField.getText());
+                System.out.println("Passwords match");
+                client.registerUser(null);
             }
         }
 

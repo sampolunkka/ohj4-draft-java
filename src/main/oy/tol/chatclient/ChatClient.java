@@ -336,18 +336,20 @@ public class ChatClient implements ChatClientDataProvider {
 	 * 
 	 * @param console
 	 */
-	private void registerUser(Console console) {
+	public boolean registerUser(Console console) {
 		println("Give user credentials for new user for server " + currentServer, colorInfo);
-		getUserCredentials(console, true);
+		if (console != null) {
+			getUserCredentials(console, true);
+		}
 		try {
 			if (username == null || password == null || email == null) {
 				println("Must specify all user information for registration!", colorError);
-				return;
 			}
 			// Execute the HTTPS request to the server.
 			int response = httpClient.registerUser();
 			if (response >= 200 || response < 300) {
 				println("Registered successfully, you may start chatting!", colorInfo);
+				return true;
 			} else {
 				println("Failed to register!", colorError);
 				println("Error from server: " + response + " " + httpClient.getServerNotification(), colorError);
@@ -360,6 +362,7 @@ public class ChatClient implements ChatClientDataProvider {
 			println(" **** ERROR in user registration with server " + currentServer, colorError);
 			println(e.getLocalizedMessage(), colorError);
 		}
+		return false;
 	}
 
 	/**
@@ -545,6 +548,31 @@ public class ChatClient implements ChatClientDataProvider {
 	@Override
 	public boolean useModifiedSinceHeaders() {
 		return useModifiedHeaders;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void resetCredentials() {
+
+		this.username = null;
+		this.password = null;
+		this.email = null;
+	}
+
+	public boolean register() {
+		boolean result = false;
+
+		return result;
 	}
 
 }

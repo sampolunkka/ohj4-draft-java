@@ -20,6 +20,11 @@ public class App {
             }
 
         });
+        try {
+            client.run("chatclient.properties");
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
 
 }
