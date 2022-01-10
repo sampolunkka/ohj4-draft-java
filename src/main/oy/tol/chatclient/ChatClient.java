@@ -27,7 +27,7 @@ import com.diogonunes.jcolor.Attribute;
  */
 public class ChatClient implements ChatClientDataProvider {
 
-	private static final String SERVER = "https://localhost:8001/";
+	private static final String SERVER = "http://localhost:8001/";
 	private static final String CMD_SERVER = "/server";
 	private static final String CMD_REGISTER = "/register";
 	private static final String CMD_LOGIN = "/login";
@@ -338,9 +338,11 @@ public class ChatClient implements ChatClientDataProvider {
 	 */
 	public boolean registerUser(Console console) {
 		println("Give user credentials for new user for server " + currentServer, colorInfo);
-		if (console != null) {
-			getUserCredentials(console, true);
-		}
+		/*
+		 * if (console != null) {
+		 * getUserCredentials(console, true);
+		 * }
+		 */
 		try {
 			if (username == null || password == null || email == null) {
 				println("Must specify all user information for registration!", colorError);
@@ -464,7 +466,7 @@ public class ChatClient implements ChatClientDataProvider {
 	/**
 	 * Prints out the configuration of the client.
 	 */
-	private void printInfo() {
+	public void printInfo() {
 		println("Server: " + currentServer, colorInfo);
 		println("Content type used: " + payloadFormat, colorInfo);
 		println("User: " + username, colorInfo);

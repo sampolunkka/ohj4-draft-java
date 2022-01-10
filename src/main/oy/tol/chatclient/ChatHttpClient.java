@@ -28,6 +28,7 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
+import javax.swing.plaf.synth.SynthStyle;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,7 +37,7 @@ public class ChatHttpClient {
 
 	private static final String TEXT_PLAIN = "text/plain";
 	private static final String APPLICATION_JSON = "application/json";
-	
+
 	// Different paths (contexts) the server supports and this client implements.
 	private static final String CHAT = "chat";
 	private static final String REGISTRATION = "registration";
@@ -170,7 +171,8 @@ public class ChatHttpClient {
 		return responseCode;
 	}
 
-	public synchronized int postChatMessage(String message) throws KeyManagementException, KeyStoreException, CertificateException,
+	public synchronized int postChatMessage(String message)
+			throws KeyManagementException, KeyStoreException, CertificateException,
 			NoSuchAlgorithmException, IOException {
 		String addr = dataProvider.getServer();
 		if (!addr.endsWith("/")) {
@@ -217,7 +219,8 @@ public class ChatHttpClient {
 			// Sometimes -- no idea why! -- connection.getInputStream() throws IOExeption
 			// when conducting parallell chat post tests. This is no fault of the server,
 			// so as a temporary fix catch exceptions here and put an indication about this
-			// in the serverNotification. This way the tests do not fail to indicate server error
+			// in the serverNotification. This way the tests do not fail to indicate server
+			// error
 			// because this is not a server error.
 			try {
 				InputStream in = connection.getErrorStream();
@@ -228,9 +231,10 @@ public class ChatHttpClient {
 						serverNotification += " " + inputLine;
 					}
 					in.close();
-				}	
+				}
 			} catch (IOException e) {
-				serverNotification = "Could not read server error message from connection input stream " + e.getMessage();
+				serverNotification = "Could not read server error message from connection input stream "
+						+ e.getMessage();
 			}
 		}
 		return responseCode;
@@ -244,9 +248,10 @@ public class ChatHttpClient {
 		}
 		addr += REGISTRATION;
 		URL url = new URL(addr);
+		System.out.println(dataProvider.getUsername() + dataProvider.getPassword() + dataProvider.getEmail());
 
 		resetLatestDataTimestamp();
-		
+
 		HttpURLConnection connection = createTrustingConnectionDebug(url);
 
 		byte[] msgBytes;
@@ -257,6 +262,7 @@ public class ChatHttpClient {
 			registrationMsg.put("email", dataProvider.getEmail());
 			msgBytes = registrationMsg.toString().getBytes(StandardCharsets.UTF_8);
 			connection.setRequestProperty("Content-Type", APPLICATION_JSON);
+			System.out.println("JSON");
 		} else {
 			String registrationMsg = dataProvider.getUsername() + ":" + dataProvider.getPassword();
 			msgBytes = registrationMsg.getBytes("UTF-8");
@@ -270,6 +276,8 @@ public class ChatHttpClient {
 
 		OutputStream writer = connection.getOutputStream();
 		writer.write(msgBytes);
+		System.out.println(
+				writer.toString());
 		writer.close();
 
 		int responseCode = connection.getResponseCode();
@@ -278,7 +286,9 @@ public class ChatHttpClient {
 			serverNotification = "";
 		} else {
 			InputStream in = connection.getInputStream();
+			System.out.println("in null");
 			if (null != in) {
+				System.out.println("null != in");
 				BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 				String inputLine;
 				while ((inputLine = reader.readLine()) != null) {
@@ -296,17 +306,18 @@ public class ChatHttpClient {
 	private HttpURLConnection createTrustingConnectionDebug(URL url) throws KeyStoreException, CertificateException,
 			NoSuchAlgorithmException, FileNotFoundException, KeyManagementException, IOException {
 		if (useHttpsInRequests) {
-			Certificate certificate = CertificateFactory.getInstance("X.509").generateCertificate(new FileInputStream(certificateFile));
+			Certificate certificate = CertificateFactory.getInstance("X.509")
+					.generateCertificate(new FileInputStream(certificateFile));
 			KeyStore keyStore = KeyStore.getInstance("JKS");
 			keyStore.load(null, null);
 			keyStore.setCertificateEntry("localhost", certificate);
-	
+
 			TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
 			trustManagerFactory.init(keyStore);
-	
+
 			SSLContext sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
-	
+
 			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setSSLSocketFactory(sslContext.getSocketFactory());
 			// All requests use these common timeouts.

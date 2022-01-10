@@ -37,7 +37,7 @@ class LoginFrame extends JFrame implements ActionListener {
     JTextField usernField = new HintTextField("username");
     JTextField regUsernField = new HintTextField("username");
     JTextField emailField = new HintTextField("email");
-    JTextField passwField = new HintTextField("password");
+    JPasswordField passwField = new HintPasswordField("password");
     JTextField regPasswField = new HintTextField("password");
     JTextField confField = new HintTextField("confirm password");
 
@@ -142,6 +142,8 @@ class LoginFrame extends JFrame implements ActionListener {
                 client.setEmail(emailField.getText());
                 System.out.println("Passwords match");
                 client.registerUser(null);
+                System.out.println(client.getUsername() + client.getPassword() + client.getEmail());
+                client.printInfo();
             }
         }
 
